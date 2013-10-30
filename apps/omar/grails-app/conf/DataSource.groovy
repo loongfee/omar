@@ -2,7 +2,7 @@ def useP6Spy = false // use this to enable p6spy logging
 
 dataSource {
   pooled = true
-  driverClassName = ( useP6Spy ) ? "com.p6spy.engine.spy.P6SpyDriver" : "org.postgis.DriverWrapper"
+  driverClassName = ( useP6Spy ) ? "com.p6spy.engine.spy.P6SpyDriver" : "org.postgresql.Driver"
   username = "postgres"
   password = "postgres"
   dialect = org.ossim.omar.postgis.PostGISDialect
@@ -21,13 +21,13 @@ environments {
     dataSource {
       dbCreate = "create-drop" // one of 'create', 'create-drop','update'
       //dbCreate = "update"
-      url = "jdbc:postgresql_postGIS:omardb-${appVersion}-dev"
+      url = "jdbc:postgresql:omardb-${appVersion}-dev"
     }
   }
   test {
     dataSource {
       dbCreate = "update"
-      url = "jdbc:postgresql_postGIS:omardb-${appVersion}-test"
+      url = "jdbc:postgresql:omardb-${appVersion}-test"
 //      url = "jdbc:postgresql_postGIS:raleigh-prod"
 //      url = "jdbc:postgresql_postGIS://10.0.10.82/omardb-1.8.16-test"
 
@@ -36,7 +36,7 @@ environments {
   production {
     dataSource {
       dbCreate = "update"
-      url = "jdbc:postgresql_postGIS:omardb-${appVersion}-prod"
+      url = "jdbc:postgresql:omardb-${appVersion}-prod"
     }
   }
 }

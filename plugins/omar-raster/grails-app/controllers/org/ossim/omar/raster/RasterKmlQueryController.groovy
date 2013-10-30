@@ -8,7 +8,7 @@ class RasterKmlQueryController extends KmlQueryController
 {
   def rasterKmlService
 
-  def rasterEntrySearchService
+  def imagerySearchService
 
   def wmsPersistParams = ["stretch_mode",
           "stretch_mode_region", "sharpen_width", "sharpen_sigma",
@@ -108,7 +108,7 @@ class RasterKmlQueryController extends KmlQueryController
     }
     log.info( queryParams.toMap() )
 
-    def rasterEntries = rasterEntrySearchService.runQuery( queryParams, caseInsensitiveParams )
+    def rasterEntries = imagerySearchService.runQuery( queryParams, caseInsensitiveParams )
     String kmlText = rasterKmlService.createImagesKml( rasterEntries, wmsParams, caseInsensitiveParams )
 
     response.setHeader( "Content-disposition", "attachment; filename=omar_last_${caseInsensitiveParams.max}_images.kml" );

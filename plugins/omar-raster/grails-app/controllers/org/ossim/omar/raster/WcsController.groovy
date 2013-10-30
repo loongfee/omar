@@ -8,7 +8,7 @@ import org.apache.commons.collections.map.CaseInsensitiveMap
 class WcsController extends OgcController
 {
   def webCoverageService
-  def rasterEntrySearchService
+  def imagerySearchService
 
   def wcs( )
   {
@@ -67,7 +67,7 @@ class WcsController extends OgcController
             wmsQuery.order = wmsQuery.order ?: "desc"
           }
 
-          def rasterEntries = rasterEntrySearchService.findRasterEntries( wcsParams?.layers?.split( ',' ) )
+          def rasterEntries = imagerySearchService.findRasterEntries( wcsParams?.layers?.split( ',' ) )
 
           if ( rasterEntries )
           {

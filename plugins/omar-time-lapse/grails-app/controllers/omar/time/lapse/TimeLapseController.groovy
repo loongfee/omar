@@ -3,12 +3,12 @@ package omar.time.lapse
 class TimeLapseController 
 {
 	def imageSpaceService
-	def rasterEntrySearchService
+	def imagerySearchService
 
 	def viewer() 
 	{ 
 	
-		def rasterEntries = rasterEntrySearchService.findRasterEntries(params.layer?.split(","))
+		def rasterEntries = imagerySearchService.findRasterEntries(params.layer?.split(","))
 		def bbox = params.bbox ?: [-180,-90,180,90]
 		def upAngle
 

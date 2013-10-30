@@ -7,7 +7,7 @@ import org.ossim.omar.raster.RasterEntryQuery
 import org.apache.commons.collections.map.CaseInsensitiveMap
 
 class JmeterController {
-    def rasterEntrySearchService
+    def imagerySearchService
 
    def setupTests = {
   }
@@ -18,7 +18,7 @@ class JmeterController {
     def out = new StringBuffer()
     paramsIgnoreCase.max = max
     bindData( queryParams, paramsIgnoreCase )
-    rasterEntries = rasterEntrySearchService.runQuery( queryParams, paramsIgnoreCase )
+    rasterEntries = imagerySearchService.runQuery( queryParams, paramsIgnoreCase )
     rasterEntries.each{x ->
         def bounds = x.groundGeom.bounds;
         out.append("${x.id}")

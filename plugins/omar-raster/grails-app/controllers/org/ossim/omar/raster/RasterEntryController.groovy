@@ -16,7 +16,7 @@ class RasterEntryController implements InitializingBean
   def baseWMS
   def dataWMS
   def webMappingService
-  def rasterEntrySearchService
+  def imagerySearchService
 
   def tagHeaderList
   def tagNameList
@@ -104,9 +104,9 @@ class RasterEntryController implements InitializingBean
        }
    */
     def queryParams = initRasterEntryQuery( params )
-    rasterEntries = rasterEntrySearchService.runQuery( queryParams, params )
+    rasterEntries = imagerySearchService.runQuery( queryParams, params )
 
-    totalCount = max > 0 ? rasterEntrySearchService.getCount( queryParams ) : 0
+    totalCount = max > 0 ? imagerySearchService.getCount( queryParams ) : 0
 
     if ( rasterEntries )
     {
@@ -332,8 +332,8 @@ class RasterEntryController implements InitializingBean
 
       def starttime = System.currentTimeMillis()
 
-      def rasterEntries = rasterEntrySearchService.runQuery( queryParams, params )
-      def totalCount = max > 0 ? rasterEntrySearchService.getCount( queryParams ) : 0
+      def rasterEntries = imagerySearchService.runQuery( queryParams, params )
+      def totalCount = max > 0 ? imagerySearchService.getCount( queryParams ) : 0
 
 
       def rasterFiles = []
@@ -426,8 +426,8 @@ class RasterEntryController implements InitializingBean
 
       def starttime = System.currentTimeMillis()
 
-      def rasterEntries = rasterEntrySearchService.runQuery( queryParams, params )
-      def totalCount = rasterEntrySearchService.getCount( queryParams )
+      def rasterEntries = imagerySearchService.runQuery( queryParams, params )
+      def totalCount = imagerySearchService.getCount( queryParams )
 
 
       def rasterFiles = []
@@ -545,8 +545,8 @@ class RasterEntryController implements InitializingBean
     }
     else
     {
-      rasterEntries = rasterEntrySearchService.runQuery( queryParams, params )
-      totalCount = rasterEntrySearchService.getCount( queryParams )
+      rasterEntries = imagerySearchService.runQuery( queryParams, params )
+      totalCount = imagerySearchService.getCount( queryParams )
 
       if ( rasterEntries )
       {
@@ -634,8 +634,8 @@ class RasterEntryController implements InitializingBean
     }
     else
     {
-      rasterEntries = rasterEntrySearchService.runQuery( queryParams, params )
-      totalCount = rasterEntrySearchService.getCount( queryParams )
+      rasterEntries = imagerySearchService.runQuery( queryParams, params )
+      totalCount = imagerySearchService.getCount( queryParams )
 
       if ( rasterEntries )
       {

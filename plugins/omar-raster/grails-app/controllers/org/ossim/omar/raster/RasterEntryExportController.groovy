@@ -8,7 +8,7 @@ import org.ossim.omar.core.HttpStatus
 class RasterEntryExportController
 {
   def exportService
-  def rasterEntrySearchService
+  def imagerySearchService
   def grailsApplication
   def ogcExceptionService
   def index( )
@@ -80,7 +80,7 @@ class RasterEntryExportController
           def httpResponse = new HttpStatusMessage()
           httpResponse.status = HttpStatus.UNAUTHORIZED
           httpResponse.message = "You are unauthorized to download the files.  " +
-                                 "You must be logged into OMARª \n and have download privileges."
+                                 "You must be logged into OMARï¿½ \n and have download privileges."
 
           httpResponse.initializeResponse(response)
           response.contentType = "text/plain"
@@ -104,7 +104,7 @@ class RasterEntryExportController
     queryParams.startDate = DateUtil.initializeDate( "startDate", params )
     queryParams.endDate = DateUtil.initializeDate( "endDate", params )
 
-    def objects = rasterEntrySearchService.runQuery( queryParams, params )
+    def objects = imagerySearchService.runQuery( queryParams, params )
 
 //    def fields = ["id", "acquisitionDate", "groundGeom"] as String[]
 //    def labels = ["id", "acquisition_date", "ground_geom"] as String[]

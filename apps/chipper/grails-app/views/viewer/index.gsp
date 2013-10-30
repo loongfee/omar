@@ -34,7 +34,7 @@
         <div id='map'></div>
     </div>
 </div>
-<r:external plugin='jquery' dir='js/jquery' file='jquery-1.8.3.min.js'/>
+<r:external plugin='jquery' dir='js/jquery' file='jquery-1.10.2.min.js'/>
 <r:external plugin='openlayers' dir='js' file='OpenLayers.js'/>
 
 <r:script>

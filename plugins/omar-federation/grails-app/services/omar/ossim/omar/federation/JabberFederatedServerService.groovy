@@ -148,7 +148,7 @@ class JabberFederatedServerService implements InitializingBean{
   {
     def result = []
     FederatedServer.withTransaction{
-      FederatedServer.findAll(sort:"id", order: 'asc').each{server->
+        FederatedServer.list(sort:"id", order: 'asc').each{server->
         def vcard = VCardProvider.createVCardFromXML(server.vcard)
         result << [
                 id: server.serverId,

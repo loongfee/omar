@@ -18,7 +18,7 @@ import org.ossim.omar.core.DateUtil
 
 class WmsController extends OgcController implements InitializingBean
 {
-  def rasterEntrySearchService
+  def imagerySearchService
   def rasterKmlService
   def webMappingService
   def wmsLogService
@@ -267,11 +267,11 @@ class WmsController extends OgcController implements InitializingBean
       if ( cmd.layers )
       {
         def layerNames = cmd.layers?.split( "," ) as String[]
-        rasterEntries = rasterEntrySearchService.getWmsImageLayers( layerNames )
+        rasterEntries = imagerySearchService.getWmsImageLayers( layerNames )
       }
       else if ( cmd.filter )
       {
-        rasterEntries = rasterEntrySearchService.getWmsImageLayers( cmd.filter )
+        rasterEntries = imagerySearchService.getWmsImageLayers( cmd.filter )
       }
 
       //  def serviceAddress = createLink(controller: "ogc", action: "wms", base: "${grailsApplication.config.omar.serverURL}", absolute: true)
@@ -327,7 +327,7 @@ class WmsController extends OgcController implements InitializingBean
       }
     }
 
-    def objects = rasterEntrySearchService.runQuery( queryParams, paramsClone )
+    def objects = imagerySearchService.runQuery( queryParams, paramsClone )
     def fields = grailsApplication.config.export.rasterEntry.fields.clone()
     def labels = grailsApplication.config.export.rasterEntry.labels.clone()
     def formatters = grailsApplication.config.export.rasterEntry.formatters
@@ -400,7 +400,13 @@ class WmsController extends OgcController implements InitializingBean
         break
       }
 
-      def layers = rasterEntrySearchService.findRasterEntries( cmd?.layers?.split( ',' ) )
+      if ( ! imagerySearchService )
+      {
+        throw new Exception("imagerySearchService is null!!!")
+      }
+
+
+      def layers = imagerySearchService.findRasterEntries( cmd?.layers?.split( ',' ) )
       def mapResult = webMappingService.getMap( cmd, layers )
 
       internaltime = System.currentTimeMillis()
@@ -504,7 +510,7 @@ class WmsController extends OgcController implements InitializingBean
     cmd.request = "GetMap"
     cmd.srs = "EPSG:4326"
     def wmsQuery = webMappingService.setupQuery( cmd );
-    def rasterEntryList = rasterEntrySearchService.findRasterEntries( cmd?.layers?.split( ',' ) )
+    def rasterEntryList = imagerySearchService.findRasterEntries( cmd?.layers?.split( ',' ) )
 
     def image = webMappingService.getMap( cmd, rasterEntryList ).image
     def tempDescription = rasterEntryList ? rasterKmlService.createImageKmlDescription( rasterEntryList[0] ) : "No images found for the kmz query"
@@ -572,5 +578,6 @@ class WmsController extends OgcController implements InitializingBean
   public void afterPropertiesSet()
   {
     scratchDir = grailsApplication.config.export.workDir ?: "/tmp";
+
   }
 }

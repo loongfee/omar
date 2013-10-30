@@ -1,12 +1,11 @@
 package org.ossim.omar.app
 
 import org.springframework.beans.factory.InitializingBean
+
 //import javax.media.jai.JAI
 import org.ossim.omar.raster.WMSQuery
 import org.ossim.omar.raster.RasterEntryFile
 import org.ossim.omar.raster.RasterEntry
-import org.ossim.omar.stager.StagerQueueJob
-import org.ossim.omar.stager.StageImageJob
 
 class MapViewController implements InitializingBean
 {
@@ -16,12 +15,12 @@ class MapViewController implements InitializingBean
   def dataWMS
   def webMappingService
   def imageSpaceService
-  def rasterEntrySearchService
+  def imagerySearchService
   def stageImageService
   def afterInterceptor = { model, modelAndView ->
     if ( request['isMobile'] )
     {
-     // modelAndView.viewName = modelAndView.viewName + "_mobile"
+      // modelAndView.viewName = modelAndView.viewName + "_mobile"
     }
   }
 
@@ -33,7 +32,12 @@ class MapViewController implements InitializingBean
     {
       query.layers = params.layers
 
-      rasterEntries = rasterEntrySearchService.findRasterEntries( params.layers?.split( ',' ) )
+      if ( !imagerySearchService )
+      {
+        throw new Exception( "imagerySearchService is null!!!" )
+      }
+
+      rasterEntries = imagerySearchService.findRasterEntries( params.layers?.split( ',' ) )
 
       if ( !rasterEntries )
       {
@@ -141,7 +145,7 @@ class MapViewController implements InitializingBean
     {
       query.layers = params.layers
 
-      rasterEntries = rasterEntrySearchService.findRasterEntries( params.layers?.split( ',' ) )
+      rasterEntries = imagerySearchService.findRasterEntries( params.layers?.split( ',' ) )
 
       if ( !rasterEntries )
       {
@@ -177,8 +181,13 @@ class MapViewController implements InitializingBean
   def imageSpace()
   {
 
+    if ( !imagerySearchService )
+    {
+      throw new Exception( "imagerySearchService is null!!!" )
+    }
+
     def layers = params?.layers?.split( ',' )
-    def rasterEntries = rasterEntrySearchService.findRasterEntries( layers )
+    def rasterEntries = imagerySearchService.findRasterEntries( layers )
 
 
     if ( rasterEntries )

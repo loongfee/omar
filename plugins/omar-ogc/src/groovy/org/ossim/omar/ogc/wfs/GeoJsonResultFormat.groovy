@@ -22,15 +22,16 @@ class GeoJsonResultFormat implements ResultFormat
   def getFeature(def wfsRequest, def workspace)
   {
 
-//    println wfsRequest
+    //println "getFeature - start ${wfsRequest}"
 
-    def results
-    def layerName = wfsRequest?.typeName?.split(':')[-1]
+
+    def results = null
+    def layerName = wfsRequest?.typeName?.split( ':' )[-1]
     def layer = workspace[layerName]
-    def filter = [
-        filter: wfsRequest?.filter ?: Filter.PASS,
-        //sort: ""// [["<COLUMN NAME>","ASC|DESC"]]
-    ]
+//    def filter = [
+//        filter: wfsRequest?.filter ?: Filter.PASS,
+//        //sort: ""// [["<COLUMN NAME>","ASC|DESC"]]
+//    ]
     def filterParams = [
         filter: wfsRequest?.filter ?: Filter.PASS,
         max: wfsRequest.maxFeatures ?: -1,
@@ -41,35 +42,42 @@ class GeoJsonResultFormat implements ResultFormat
     {
 
       // filterParams.sort =null//[["TITLE".toUpperCase(),"DESC"]]
-      filterParams.sort = wfsRequest.convertSortByToArray();//wfsRequest.sortBy.substring()//JSON.parse( wfsRequest.sort );
+      filterParams.sort = wfsRequest.convertSortByToArray();
+      //wfsRequest.sortBy.substring()//JSON.parse( wfsRequest.sort );
 
       //println filterParams
     }
     try
     {
-      filter = new Filter( filterParams.filter )
+      //println filterParams
+      def filter = new Filter( filterParams.filter )
+
+      if ( wfsRequest.resultType?.toLowerCase() == "hits" )
+      {
+        def count = layer.count( filter );
+        def timestamp = new DateTime( DateTimeZone.UTC );
+        results = "${[numberOfFeatures: count, timestamp: timestamp] as JSON}"
+      }
+      else
+      {
+        def writer = new GeoJSONWriter()
+        def cursor = layer.getCursor( filterParams );
+        def newLayer = new Layer( cursor.col )
+
+        results = writer.write( newLayer )
+        cursor?.close()
+      }
     }
     catch ( e )
     {
       e.printStackTrace()
     }
-
-    if ( wfsRequest.resultType?.toLowerCase() == "hits" )
+    finally
     {
-      def count = layer.count( filter );
-      def timestamp = new DateTime( DateTimeZone.UTC );
-      results = "${[numberOfFeatures: count, timestamp: timestamp] as JSON}"
+      workspace?.close()
     }
-    else
-    {
-      def writer = new GeoJSONWriter()
-      def cursor = layer.getCursor( filterParams );
-      def newLayer = new Layer( cursor.col )
 
-      results = writer.write( newLayer )
-      cursor?.close()
-    }
-    workspace?.close()
+    //println "getFeature - end ${results}"
 
     return [results, contentType]
   }
