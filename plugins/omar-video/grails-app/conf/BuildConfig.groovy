@@ -41,17 +41,12 @@ grails.project.dependency.resolution = {
 
   plugins {
     build( ":release:3.0.1",
-        ":rest-client-builder:1.0.3"//,
-//              ":hibernate:3.6.10.2",
-//	      ":filterpane:2.2.3"
+        ":rest-client-builder:1.0.3"
     ) {
       export = false
     }
 
-    compile( ":flash-player:1.4" ) {
-      excludes "resources"
-    }
-    compile ":swfobject:2.2.1"
+    compile ":flash-player:1.4"
   }
 }
 
